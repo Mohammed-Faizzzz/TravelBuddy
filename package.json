@@ -1,0 +1,19 @@
+{
+  "name": "travelbuddy",
+  "version": "1.0.0",
+  "description": "an app to auto generate travel itineraries",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mohammed-Faizzzz/TravelBuddy.git"
+  },
+  "author": "Faiz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mohammed-Faizzzz/TravelBuddy/issues"
+  },
+  "homepage": "https://github.com/Mohammed-Faizzzz/TravelBuddy#readme"
+}
