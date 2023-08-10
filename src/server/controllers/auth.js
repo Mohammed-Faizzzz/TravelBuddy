@@ -33,13 +33,13 @@ User.beforeCreate(async (user, options) => {
 const signup = (req, res, next) => {
     User.findOne({ where : {
         [Sequelize.Op.or]: [
-            { email: req.body.email },
+            { username: req.body.username },
             { phoneno: req.body.phoneno }
         ]
     }})
     .then (dbUser => {
         if (dbUser) {
-            return res.status(409).json({message: "email and/or phone number already exists"});
+            return res.status(409).json({message: "username already taken"});
         } else if (!req.body.firstname) {
             return res.status(400).json({message: "first name not provided"});
         } else if (!req.body.lastname) {
@@ -48,27 +48,20 @@ const signup = (req, res, next) => {
             return res.status(400).json({message: "gender not provided"});
         } else if (!req.body.dateofbirth) {
             return res.status(400).json({message: "Date of Birth not provided"});
-        } else if (!req.body.email) {
-            return res.status(400).json({message: "email not provided"});
+        } else if (!req.body.username) {
+            return res.status(400).json({message: "username not provided"});
         } else if (!req.body.password) {
             return res.status(400).json({message: "password not provided"});
         } else if (!req.body.confirmpassword) {
             return res.status(400).json({message: "password not confirmed"});
-        } else if (!req.body.phoneno) {
-            return res.status(400).json({message: "phone number not provided"});
-        } else if (!req.body.address) {
-            return res.status(400).json({message: "address not provided"});
         } else {
             return User.create(({
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
                 gender: req.body.gender,
                 dateofbirth: req.body.dateofbirth,
-                email: req.body.email,
+                username: req.body.username,
                 password: req.body.password,
-                // confirmPassword: req.body.confirmPassword,
-                phoneno: req.body.phoneno,
-                address: req.body.address, 
                 
             }))
             .then(() => {

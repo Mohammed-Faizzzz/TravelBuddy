@@ -10,11 +10,9 @@ const sequelize = require('../../utils/database.js');
  * @property {string} lastName - The last name of the user.
  * @property {Date} dateOfBirth - The date of birth of the user.
  * @property {string} gender - The gender of the user.
- * @property {string} phoneNo - The phone number of the user.
- * @property {string} email - The email address of the user.
+ * @property {string} username - The username of the user.
  * @property {string} password - The password of the user.
  * @property {string} confirmPassword - The confirmation password of the user.
- * @property {string} address - The address of the user.
  * /
 
 /**
@@ -42,7 +40,7 @@ const User = sequelize.define('users', {
    }, dateofbirth: {
       type: Sequelize.DATE,
       allowNull: false,
-   }, email: {
+   }, username: {
       type: Sequelize.STRING,
       allowNull: false,
       unique: true,
@@ -64,18 +62,6 @@ const User = sequelize.define('users', {
             throw new Error('Password confirmation does not match');
           }
         },
-      },
-   }, phoneno: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        is: /^\+62[0-9]{9,12}$/i, 
-      },
-   }, address: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
       },
    },
 }, {
