@@ -56,7 +56,7 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style = {styles.background}>
         <View style={styles.card}>
-            <Text style={styles.heading}>{'TalkItOut!'}</Text>
+            <Text style={styles.heading}>{'TravelBuddy'}</Text>
             <View style={styles.form}>
                 <View style={styles.inputs}>
                     <TextInput style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={setEmail}></TextInput>

@@ -8,12 +8,9 @@ const SignupScreen = ({navigation}) => {
   const [lastname, setLastName] = useState('');
   const [gender, setGender] = useState('');
   const [dateofbirth, setDateOfBirth] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmpassword, setconfirmPassword] = useState('');
-  const [phoneno, setPhoneNo] = useState('');
-  const [address, setAddress] = useState('');
-  
 
   const handleInputChange = (text, inputField) => {
     switch (inputField) {
@@ -26,20 +23,14 @@ const SignupScreen = ({navigation}) => {
       case 'dateofbirth':
         setDateOfBirth(text);
         break;
-      case 'email':
-        setEmail(text);
+      case 'username':
+        setUsername(text);
         break;
       case 'password':
         setPassword(text);
         break;
       case 'confirmpassword':
         setconfirmPassword(text);
-        break;
-      case 'phoneno':
-        setPhoneNo(text);
-        break;
-      case 'address':
-        setAddress(text);
         break;
       default:
         break;
@@ -56,11 +47,9 @@ const SignupScreen = ({navigation}) => {
       lastname,
       gender: gender,
       dateofbirth: new Date (dateofbirth),
-      email,
+      username,
       password,
       confirmpassword,
-      phoneno,
-      address
     };
 
     console.log('Form submitted');
@@ -69,11 +58,9 @@ const SignupScreen = ({navigation}) => {
       lastname,
       gender: gender,
       dateofbirth,
-      email,
+      username,
       password,
       confirmpassword,
-      phoneno,
-      address
     });
   
     // Use the fetch API to send the data to the server
@@ -112,7 +99,7 @@ const SignupScreen = ({navigation}) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>TalkItOut: Signup</Text>
+      <Text style={styles.header}>TravelBuddy: Signup</Text>
       <View style={styles.form}>
         <TextInput
           style={styles.input}
@@ -158,10 +145,10 @@ const SignupScreen = ({navigation}) => {
         />
         <TextInput
           style={styles.input}
-          placeholder="Email Address"
+          placeholder="Username"
           placeholderTextColor="#888"
-          value={email}
-          onChangeText={(text) => handleInputChange(text, 'email')}
+          value={username}
+          onChangeText={(text) => handleInputChange(text, 'username')}
         />
         <TextInput
           style={styles.input}
@@ -178,20 +165,6 @@ const SignupScreen = ({navigation}) => {
           onChangeText={(text) => handleInputChange(text, 'confirmpassword')}
         />
         {/*  */}
-        <TextInput
-          style={styles.input}
-          placeholder="Phone Number"
-          placeholderTextColor="#888"
-          value={phoneno}
-          onChangeText={(text) => handleInputChange(text, 'phoneno')}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Address"
-          placeholderTextColor="#888"
-          value={address}
-          onChangeText={(text) => handleInputChange(text, 'address')}
-        />
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.submitButtonText}>Submit</Text>
         </TouchableOpacity>
