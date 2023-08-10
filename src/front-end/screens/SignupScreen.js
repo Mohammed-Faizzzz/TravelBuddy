@@ -164,7 +164,7 @@ const SignupScreen = ({navigation}) => {
           value={confirmpassword}
           onChangeText={(text) => handleInputChange(text, 'confirmpassword')}
         />
-        {/*  */}
+        {/* submit button */}
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.submitButtonText}>Submit</Text>
         </TouchableOpacity>
