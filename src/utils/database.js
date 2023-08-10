@@ -9,9 +9,9 @@ const customLogger = (message) => {
     console.log('Log:', message);
   };
 const sequelize = new Sequelize(
-    'talkitout', 
-    'tio_admin_faiz', 
-    'tio_admin_access', 
+    'travelbuddy', 
+    'tb_admin_faiz', 
+    'tb_admin_access', 
     {
         dialect: 'postgres',
         host: '127.0.0.1',
