@@ -1,0 +1,39 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "proxy": "http://localhost:3000",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "start:backend": "nodemon app.js",
+    "dev": "concurrently \"npx start\" \"npm run start:backend\"",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@babel/preset-env": "^7.21.5",
+    "@babel/preset-react": "^7.18.6",
+    "@expo/webpack-config": "^18.1.0",
+    "@react-navigation/native": "^6.1.6",
+    "@react-navigation/stack": "^6.3.16",
+    "axios": "^1.4.0",
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^8.0.1",
+    "expo": "~48.0.15",
+    "expo-screen-orientation": "^5.1.1",
+    "expo-status-bar": "~1.4.4",
+    "expo-av": "^13.2.1",
+    "react": "^18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "^0.71.8",
+    "react-native-progress": "^5.0.0",
+    "react-native-safe-area-context": "^4.5.0",
+    "react-native-screens": "~3.20.0",
+    "react-native-web": "^0.18.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.8"
+  },
+  "private": true
+}
