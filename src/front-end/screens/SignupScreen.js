@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Button } from 'react-native';
 
-const API_URL = 'http://127.0.0.1:3000';
+const API_URL = 'http://192.168.1.253:3000';
 
 const SignupScreen = ({navigation}) => {
   const [firstname, setFirstName] = useState('');
@@ -11,6 +11,9 @@ const SignupScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmpassword, setconfirmPassword] = useState('');
+
+  const [isError, setIsError] = useState(false); // Add this line
+  const [message, setMessage] = useState('');
 
   const handleInputChange = (text, inputField) => {
     switch (inputField) {
@@ -64,7 +67,7 @@ const SignupScreen = ({navigation}) => {
     });
   
     // Use the fetch API to send the data to the server
-    console.log(`${API_URL}/login`);
+    console.log(`${API_URL}/signup`);
     fetch(`${API_URL}/signup`, { 
       method: 'POST',
       headers: {
@@ -74,26 +77,23 @@ const SignupScreen = ({navigation}) => {
       body: JSON.stringify(payload),
     })
     .then(async res => { 
-      console.log('signing up');
-      // console.log('Response:', res);
-      try {
+      console.log('Response status:', res.status);
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.log('Error response:', errorData);
+        setIsError(true); 
+        setMessage(errorData.message);
+      } else {
+        console.log('Sign up successful');
         const jsonRes = await res.json();
-        if (res.status !== 200) {
-          setIsError(true); 
-          setMessage(jsonRes.message);
-        } else {
-          setIsError(false);
-          setMessage(jsonRes.message);
-          navigation.navigate('LoginScreen');
-        }
-      } catch (err) {
-        console.log(err);
-      };
+        setIsError(false);
+        setMessage(jsonRes.message);
+        navigation.navigate('LoginScreen');
+      }
     })
     .catch(err => {
-      console.log(err);
-    });
-
+      console.log('Fetch error:', err);
+    });    
     // navigation.navigate('LoginScreen');
   };
 

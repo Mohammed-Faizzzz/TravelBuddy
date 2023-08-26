@@ -86,7 +86,7 @@ const signup = (req, res, next) => {
  */
 const login = (req, res, next) => {
     User.findOne({ where : {
-        email: req.body.email,
+        username: req.body.username,
     }})
     .then (dbUser => {
         if (!dbUser) {
@@ -96,7 +96,7 @@ const login = (req, res, next) => {
                 if (err) {
                     res.status(502).json({message: "error while checking user password"});
                 } else if (compareRes) {
-                    const token = jwt.sign({ email: req.body.email }, 'secret', { expiresIn: '1h' });
+                    const token = jwt.sign({ email: req.body.username }, 'secret', { expiresIn: '1h' });
                     res.status(200).json({message: "user logged in", "token": token});
                 } else { 
                     res.status(401).json({message: "invalid credentials"});

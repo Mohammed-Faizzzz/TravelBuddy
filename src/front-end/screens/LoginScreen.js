@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { ImageBackground, View, Text, StyleSheet, TouchableOpacity, TextInput, Platform } from 'react-native';
 
-const API_URL = 'http://127.0.0.1:3000';
+const API_URL = 'http://192.168.1.253:3000';
 
 const LoginScreen = ({ navigation }) => {
 
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const [isError, setIsError] = useState(false);
@@ -14,7 +14,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     const payload = {
-        email,
+        username,
         password,
     };
     console.log(payload);
@@ -37,7 +37,7 @@ const LoginScreen = ({ navigation }) => {
                 // onLoggedIn(jsonRes.token);
                 setIsError(false);
                 setMessage(jsonRes.message);
-                navigation.navigate('Home',{userEmail: email});
+                navigation.navigate('Home',{username: username});
             }
         } catch (err) {
             console.log(err);
@@ -59,7 +59,7 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.heading}>{'TravelBuddy'}</Text>
             <View style={styles.form}>
                 <View style={styles.inputs}>
-                    <TextInput style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={setEmail}></TextInput>
+                    <TextInput style={styles.input} placeholder="Username" autoCapitalize="none" onChangeText={setUsername}></TextInput>
                     <TextInput secureTextEntry={true} style={styles.input} placeholder="Password" onChangeText={setPassword}></TextInput>
                     <TouchableOpacity style={styles.button} onPress={handleLogin}>
                         <Text style={styles.buttonText}>Login</Text>
