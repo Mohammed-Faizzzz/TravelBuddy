@@ -5,13 +5,13 @@ import TopBar from '../components/TopBar';
 import NavBar from '../components/NavBar';
 
 
-const Home = ({ route, navigation }) => {
+const Home = ({route, navigation}) => {
 
   const {userEmail} = route.params;
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = 'http://192.168.1.6:3000';
+  const API_URL = 'http://127.0.0.1:3000';
 
   useEffect(() => {
     handleUserData();

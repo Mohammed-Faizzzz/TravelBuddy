@@ -33,8 +33,7 @@ User.beforeCreate(async (user, options) => {
 const signup = (req, res, next) => {
     User.findOne({ where : {
         [Sequelize.Op.or]: [
-            { username: req.body.username },
-            { phoneno: req.body.phoneno }
+            { username: req.body.username }
         ]
     }})
     .then (dbUser => {

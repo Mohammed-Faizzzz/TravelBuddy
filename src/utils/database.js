@@ -10,8 +10,8 @@ const customLogger = (message) => {
   };
 const sequelize = new Sequelize(
     'travelbuddy', 
-    'tb_admin_faiz', 
-    'tb_admin_access', 
+    'travelbuddy_admin',
+    'travelbuddy_admin',
     {
         dialect: 'postgres',
         host: '127.0.0.1',

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Button } from 'react-native';
 
-const API_URL = 'http://192.168.1.6:3000';
+const API_URL = 'http://127.0.0.1:3000';
 
 const SignupScreen = ({navigation}) => {
   const [firstname, setFirstName] = useState('');
@@ -94,7 +94,7 @@ const SignupScreen = ({navigation}) => {
       console.log(err);
     });
 
-    navigation.navigate('LoginScreen');
+    // navigation.navigate('LoginScreen');
   };
 
   return (

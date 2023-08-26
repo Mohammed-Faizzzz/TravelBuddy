@@ -45,7 +45,7 @@ const User = sequelize.define('users', {
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true,
+        notEmpty: true,
       },
    }, password: {
       type: Sequelize.STRING,
