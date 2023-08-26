@@ -12,7 +12,7 @@ const TopBar = () => {
       {/* Company Logo */}
       <Image
         source={require('../assets/icon.jpeg')}
-        style={{ width: 140, height: 35, marginRight: 8, marginLeft: 10 }}
+        style={{ width: 360, height: 50 }}
       />
       </View>
     );
@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingHorizontal: 16,
       backgroundColor: '#FEF4E8',
       borderBottomWidth: 1,
       borderBottomColor: '#ccc',

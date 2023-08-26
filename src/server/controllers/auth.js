@@ -151,9 +151,9 @@ const getNames = (req, res, next) => {
 };
 
 const fetchUserData = (req, res) => {
-    const userEmail = decodeURIComponent(req.params.email);
+    const username = decodeURIComponent(req.params.username);
   
-    User.findOne({ where: { email: userEmail } })
+    User.findOne({ where: { username: username } })
       .then(userData => {
         if (userData) {
           res.status(200).json(userData);

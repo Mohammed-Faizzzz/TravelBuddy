@@ -13,44 +13,44 @@ const Home = ({route, navigation}) => {
 
   const API_URL = 'http://192.168.1.253:3000';
 
-  useEffect(() => {
-    handleUserData();
-}, []);
+//   useEffect(() => {
+//     handleUserData();
+// }, []);
 
-const handleUserData = () => {
-  fetch(`${API_URL}/fetchUserData/${encodeURIComponent(username)}`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((res) => {
-      console.log("Server Response:", JSON.stringify(res));
-      if (res.ok) {
-        return res.json();
-      } else {
-        throw new Error(`Server responded with status: ${res.status}`);
-      }
-    })
-    .then((data) => {
-      console.log("Fetched Data:", JSON.stringify(data));
-      setUserData(data);
-    })
-    .catch((err) => {
-      console.error("Error during fetch:", JSON.stringify(err));
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-};
+// const handleUserData = () => {
+//   fetch(`${API_URL}/fetchUserData/${encodeURIComponent(username)}`, {
+//     method: 'GET',
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json',
+//     },
+//   })
+//     .then((res) => {
+//       console.log("Server Response:", JSON.stringify(res));
+//       if (res.ok) {
+//         return res.json();
+//       } else {
+//         throw new Error(`Server responded with status: ${res.status}`);
+//       }
+//     })
+//     .then((data) => {
+//       console.log("Fetched Data:", JSON.stringify(data));
+//       setUserData(data);
+//     })
+//     .catch((err) => {
+//       console.error("Error during fetch:", JSON.stringify(err));
+//     })
+//     .finally(() => {
+//       setLoading(false);
+//     });
+// };
 
 
-  if (loading) {
-    return <Text>Loading...</Text>;
-}
+//   if (loading || !userData) {
+//     return <Text>Loading...</Text>;
+// }
 
-const userId = userData.id; //pass it on for progress database access
+// const userId = userData.id; //pass it on for progress database access
   
 
   return (
@@ -59,8 +59,8 @@ const userId = userData.id; //pass it on for progress database access
         <TopBar />
         {/* Content */}
         <View style= {styles.content}>
-        <Text style={styles.header}>Selamat datang di Aplikasi Terapi Karla!</Text>
-        <Text style={styles.subheader}>Apa yang ingin Anda lakukan hari ini?</Text>
+        <Text style={styles.header}>Welcome to TravelBuddy!</Text>
+        <Text style={styles.subheader}>Where does your next adventure lie?</Text>
         </View>
       </ScrollView>
       <NavBar />
