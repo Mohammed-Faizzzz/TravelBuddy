@@ -12,7 +12,7 @@ const SignupScreen = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [confirmpassword, setconfirmPassword] = useState('');
 
-  const [isError, setIsError] = useState(false); // Add this line
+  const [isError, setIsError] = useState(false);
   const [message, setMessage] = useState('');
 
   const handleInputChange = (text, inputField) => {
