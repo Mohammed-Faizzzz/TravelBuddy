@@ -49,7 +49,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const goToSignUpPage = () => {
-    navigation.navigate('SignupScreen');
+    navigation.navigate('TravelInput');
     // navigation.navigate('Home');
   };
 

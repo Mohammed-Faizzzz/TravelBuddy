@@ -12,6 +12,7 @@ import SettingsPage from './screens/SettingsPage';
 import MyProfile from './screens/MyProfile';
 import MyProgress from './screens/MyProgress';
 import Home from './screens/Home';
+import TravelInput from './screens/TravelInput';
 
 
 const Stack = createStackNavigator();
@@ -59,6 +60,7 @@ export default function App() {
         <Stack.Screen name ="MyProgress" component={MyProgress} />
         <Stack.Screen name ="MyProfile" component={MyProfile} />
         <Stack.Screen name ="SettingsPage" component={SettingsPage} />
+        <Stack.Screen name ="TravelInput" component={TravelInput} />
         
       </Stack.Navigator>
     </NavigationContainer>
