@@ -10,11 +10,11 @@ const customLogger = (message) => {
   };
 const sequelize = new Sequelize(
     'travelbuddy', 
-    'travelbuddy_admin',
-    'travelbuddy_admin',
+    'postgres',
+    '151120',
     {
         dialect: 'postgres',
-        host: '127.0.0.1',
+        host: 'localhost',
         logging: customLogger,
         pool: {
             max: 5,

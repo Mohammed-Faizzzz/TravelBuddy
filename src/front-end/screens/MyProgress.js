@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:3000';
+const API_URL = 'http://192.168.10.6:19000';
 
 const MyProgress = ({ route, navigation }) => {
   const { userId, userEmail } = route.params;

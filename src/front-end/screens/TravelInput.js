@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, FlatList, TouchableWithoutFeedback, Button } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { Picker } from '@react-native-picker/picker';
 
+import OpenAI from 'openai';
+
 const TravelInput = ({ navigation }) => {
+
+  const openai = new OpenAI({
+    apiKey: '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',
+    dangerouslyAllowBrowser: true,
+
+  });
+
   const [location, setLocation] = useState('');
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
@@ -12,9 +21,48 @@ const TravelInput = ({ navigation }) => {
   const [destinationType, setDestinationType] = useState('');
   const [dietaryRequirements, setDietaryRequirements] = useState('');
   const [disabilities, setDisabilities] = useState(''); 
+  const [activities, setActivities] = useState('');
   const [showDestinationTypePicker, setShowDestinationTypePicker] = useState(false);
   const [showDietaryRequirementsPicker, setShowDietaryRequirementsPicker] = useState(false);
   const [showDisabilitiesPicker, setShowDisabilitiesPicker] = useState(false);
+  const [result, setResult] = useState('');
+
+  const [showItinerary, setShowItinerary] = useState(false);
+
+  const promptGen = (location, selectedStartDate, selectedEndDate, hotelAddress, destinationType, dietaryRequirements, disabilities, activities) => {
+    return `The following is a travel itinerary request :
+
+    A person travelling to ${location} from ${selectedStartDate} to ${selectedEndDate}.
+    The place where the traveller/s are staying is at ${hotelAddress}. The trip is a ${destinationType}. The dietary requirements of the traveller/s is ${dietaryRequirements}, the traveller/s are ${disabilities}.
+    
+    Preferred activities are : ${activities}. (For this, if the activities do not make sense to you, in your reply JSON, just send back the following :
+    {
+        "itinerary" : {},
+        "totalCost": '',
+        "error" : 'error'
+    }
+    )
+    
+    Plan out a daily itinerary for the entire trip (all the days from start to end) as stated above based on the info above.I want you to return the data of itinerary for the whole trip you fetch as a JSON with the following headings :
+    {
+        "itinerary" : {
+            "day1": [{
+                "time": '',
+                "nameOfActivity": '',
+                "locationOfActivity": '',
+                "costOfActivity": '',
+                "distanceFromAddress": '',
+                "disabilityFriendly": '',
+                "isFood": '',
+                "locationOfNearestFood": ''
+            },... ],
+            "day2: [{}...]",	
+            },
+        "totalCost": '',
+        "error": 'false'
+    }
+    `; 
+  }
 
   const toggleDestinationTypePicker = () => {
     setShowDestinationTypePicker(prev => !prev);
@@ -28,15 +76,32 @@ const TravelInput = ({ navigation }) => {
     setShowDisabilitiesPicker(prev => !prev);
   };
 
-  const handleSave = () => {
-    // Do something with the entered travel details
-    console.log('Location:', location);
-    console.log('Start Date:', selectedStartDate);
-    console.log('End Date:', selectedEndDate);
-    console.log('Hotel Address:', hotelAddress);
-    console.log('Destination Type:', destinationType);
-    console.log('Dietary Requirements:', dietaryRequirements);
-    console.log('Disabilities:', disabilities);
+  const handleSave = async () => {
+
+    try {
+      // Do something with the entered travel details
+      console.log('Location:', location);
+      console.log('Start Date:', selectedStartDate);
+      console.log('End Date:', selectedEndDate);
+      console.log('Hotel Address:', hotelAddress);
+      console.log('Destination Type:', destinationType);
+      console.log('Dietary Requirements:', dietaryRequirements);
+      console.log('Disabilities:', disabilities);
+
+      const generatedPrompt = promptGen(location, selectedStartDate, selectedEndDate, hotelAddress, destinationType, dietaryRequirements, disabilities, activities);
+      console.log(generatedPrompt);
+      const res = await openai.completions.create({
+        model: "text-davinci-003",
+        prompt: generatedPrompt,
+        max_tokens: 3000,
+      });
+      console.log(res);
+      setResult(res.choices[0].text);
+      setShowItinerary(true);
+    } catch (e) {
+      console.log(e);
+    }
+
   };
 
   const handleDateSelect = (date) => {
@@ -53,6 +118,16 @@ const TravelInput = ({ navigation }) => {
     setShowCalendar(prev => !prev); // Reset showCalendar state to false
   };
 
+  if (showItinerary) {
+    return (
+      <View style={styles.container}>
+        <Text>itinerary page</Text>
+        {console.log(result)}
+        <Button onPress={() => setShowItinerary(false)}>Travel Detail Form</Button>
+      </View>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Please enter your Travel Details</Text>
@@ -64,7 +139,7 @@ const TravelInput = ({ navigation }) => {
         onChangeText={setLocation}
       />
 
-<TouchableWithoutFeedback onPress={popUpCalendar}>
+      <TouchableWithoutFeedback onPress={popUpCalendar}>
         <View style={styles.input}>
           <Text style={styles.dateInputText}>
             {selectedStartDate && selectedEndDate
@@ -101,7 +176,7 @@ const TravelInput = ({ navigation }) => {
 />
 
 {/* Destination Type */}
-<TouchableWithoutFeedback onPress={toggleDestinationTypePicker}>
+      <TouchableWithoutFeedback onPress={toggleDestinationTypePicker}>
         <View style={styles.input}>
           <Text style={styles.pickerPlaceholder}>
             {destinationType ? destinationType : 'Select Destination Type'}
@@ -121,7 +196,7 @@ const TravelInput = ({ navigation }) => {
       )}
 
 {/* Dietary Requirements */}
-<TouchableWithoutFeedback onPress={toggleDietaryRequirementsPicker}>
+      <TouchableWithoutFeedback onPress={toggleDietaryRequirementsPicker}>
         <View style={styles.input}>
           <Text style={styles.pickerPlaceholder}>
             {dietaryRequirements ? dietaryRequirements : 'Select Dietary Requirements'}
@@ -142,8 +217,16 @@ const TravelInput = ({ navigation }) => {
         </Picker>
       )}
 
+{/* Activities */}
+  <TextInput
+    style={styles.input}
+    placeholder="Activities/Attractions you would want to do/visit there"
+    value={activities}
+    onChangeText={(text) => setActivities(text)}
+  />
+
 {/* Disabilities */}
-<TouchableWithoutFeedback onPress={toggleDisabilitiesPicker}>
+      <TouchableWithoutFeedback onPress={toggleDisabilitiesPicker}>
         <View style={styles.input}>
           <Text style={styles.pickerPlaceholder}>
             {disabilities ? disabilities : 'Any disabilities'}
@@ -162,7 +245,7 @@ const TravelInput = ({ navigation }) => {
         </Picker>
       )}
 
-<TouchableOpacity style={styles.button} onPress={handleSave}>
+      <TouchableOpacity style={styles.button} onPress={handleSave}>
         <Text style={styles.optionText}>Save Travel Details</Text>
       </TouchableOpacity>
 

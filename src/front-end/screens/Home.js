@@ -11,7 +11,7 @@ const Home = ({route, navigation}) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = 'http://192.168.1.253:3000';
+  const API_URL = process.env.API_URL;
 
 //   useEffect(() => {
 //     handleUserData();
