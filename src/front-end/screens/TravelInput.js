@@ -7,12 +7,6 @@ import OpenAI from 'openai';
 
 const TravelInput = ({ navigation }) => {
 
-  const openai = new OpenAI({
-    apiKey: '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',
-    dangerouslyAllowBrowser: true,
-
-  });
-
   const [location, setLocation] = useState('');
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
@@ -77,31 +71,43 @@ const TravelInput = ({ navigation }) => {
   };
 
   const handleSave = async () => {
-
     try {
-      // Do something with the entered travel details
-      console.log('Location:', location);
-      console.log('Start Date:', selectedStartDate);
-      console.log('End Date:', selectedEndDate);
-      console.log('Hotel Address:', hotelAddress);
-      console.log('Destination Type:', destinationType);
-      console.log('Dietary Requirements:', dietaryRequirements);
-      console.log('Disabilities:', disabilities);
-
+  
       const generatedPrompt = promptGen(location, selectedStartDate, selectedEndDate, hotelAddress, destinationType, dietaryRequirements, disabilities, activities);
       console.log(generatedPrompt);
-      const res = await openai.completions.create({
-        model: "text-davinci-003",
+  
+      const apiKey = 'xxx';
+      const apiEndpoint = 'https://api.openai.com/v1/completions';
+  
+      const headers = {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      };
+  
+      const requestData = {
+        model: 'text-davinci-003',
         prompt: generatedPrompt,
         max_tokens: 3000,
+      };
+  
+      const response = await fetch(apiEndpoint, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(requestData),
       });
-      console.log(res);
-      setResult(res.choices[0].text);
+  
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+  
+      const responseData = await response.json();
+      console.log(responseData);
+  
+      setResult(responseData.choices[0].text);
       setShowItinerary(true);
     } catch (e) {
       console.log(e);
     }
-
   };
 
   const handleDateSelect = (date) => {
@@ -123,7 +129,7 @@ const TravelInput = ({ navigation }) => {
       <View style={styles.container}>
         <Text>itinerary page</Text>
         {console.log(result)}
-        <Button onPress={() => setShowItinerary(false)}>Travel Detail Form</Button>
+        <Button title="Travel Detail Form" onPress={() => setShowItinerary(false)} />
       </View>
     )
   }

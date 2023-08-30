@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ImageBackground, View, Text, StyleSheet, TouchableOpacity, TextInput, Platform } from 'react-native';
 
-const API_URL = 'http://192.168.10.6:19000';
+const API_URL = 'http://137.132.26.172:19000';
 
 const LoginScreen = ({ navigation }) => {
 
