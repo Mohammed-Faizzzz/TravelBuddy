@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, FlatLi
 import { CalendarList } from 'react-native-calendars';
 import { Picker } from '@react-native-picker/picker';
 
-import OpenAI from 'openai';
 
 const TravelInput = ({ navigation }) => {
 
