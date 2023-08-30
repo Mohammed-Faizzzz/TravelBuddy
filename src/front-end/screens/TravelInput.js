@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, FlatList, TouchableWithoutFeedback, Button } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { Picker } from '@react-native-picker/picker';
 
+import ItineraryCard from '../components/ItineraryCard';
 
 const TravelInput = ({ navigation }) => {
 
@@ -18,9 +19,15 @@ const TravelInput = ({ navigation }) => {
   const [showDestinationTypePicker, setShowDestinationTypePicker] = useState(false);
   const [showDietaryRequirementsPicker, setShowDietaryRequirementsPicker] = useState(false);
   const [showDisabilitiesPicker, setShowDisabilitiesPicker] = useState(false);
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState(null);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showItinerary, setShowItinerary] = useState(false);
+
+  useEffect(() => {
+    console.log(result); // Log the updated result whenever it changes
+  }, [result]);
 
   const promptGen = (location, selectedStartDate, selectedEndDate, hotelAddress, destinationType, dietaryRequirements, disabilities, activities) => {
     return `The following is a travel itinerary request :
@@ -31,28 +38,41 @@ const TravelInput = ({ navigation }) => {
     Preferred activities are : ${activities}. (For this, if the activities do not make sense to you, in your reply JSON, just send back the following :
     {
         "itinerary" : {},
-        "totalCost": '',
+        "totalCost": "",
         "error" : 'error'
     }
     )
     
     Plan out a daily itinerary for the entire trip (all the days from start to end) as stated above based on the info above.I want you to return the data of itinerary for the whole trip you fetch as a JSON with the following headings :
     {
-        "itinerary" : {
-            "day1": [{
-                "time": '',
-                "nameOfActivity": '',
-                "locationOfActivity": '',
-                "costOfActivity": '',
-                "distanceFromAddress": '',
-                "disabilityFriendly": '',
-                "isFood": '',
-                "locationOfNearestFood": ''
-            },... ],
-            "day2: [{}...]",	
-            },
-        "totalCost": '',
-        "error": 'false'
+      "itinerary": [
+        {
+          "day": "1",
+          "activities": [
+            {
+              "time": "",
+              "nameOfActivity": "",
+              "descriptionOfActivity": "", // add a short description about the activity 
+              "locationOfActivity": "",
+              "costOfActivity": "",
+              "distanceFromAddress": "", // as numbers in km
+              "disabilityFriendly": "",
+              "isFood": "",
+              "locationOfNearestFood": ""
+            },{},{}
+          ]
+        },
+        {
+          "day": "2",
+          "activities": [{},{},{}]
+        },
+        {
+          "day": "3",
+          "activities": [{},{},{}]
+        } // keep going till the last day
+      ],
+      "totalCost": "", // must be a string
+      "error": ""
     }
     `; 
   }
@@ -71,11 +91,11 @@ const TravelInput = ({ navigation }) => {
 
   const handleSave = async () => {
     try {
-  
+      setIsLoading(true);
+
       const generatedPrompt = promptGen(location, selectedStartDate, selectedEndDate, hotelAddress, destinationType, dietaryRequirements, disabilities, activities);
-      console.log(generatedPrompt);
   
-      const apiKey = 'xxx';
+      const apiKey = 'enter api key here';
       const apiEndpoint = 'https://api.openai.com/v1/completions';
   
       const headers = {
@@ -100,9 +120,13 @@ const TravelInput = ({ navigation }) => {
       }
   
       const responseData = await response.json();
-      console.log(responseData);
+
+      const responseText = responseData.choices[0].text;
   
-      setResult(responseData.choices[0].text);
+      const parsedResponse = JSON.parse(responseText); // Parse the JSON text
+
+      setResult(parsedResponse);
+      setIsLoading(false);
       setShowItinerary(true);
     } catch (e) {
       console.log(e);
@@ -123,11 +147,184 @@ const TravelInput = ({ navigation }) => {
     setShowCalendar(prev => !prev); // Reset showCalendar state to false
   };
 
-  if (showItinerary) {
+  const sampleJSON = {
+    "itinerary": [
+        {
+            "day": "1",
+            "activities": [
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Hiking in Mount Batur",
+                    "descriptionOfActivity": "An active volcano and an Ancient Hindu Temple, stunning views of Lake Batur and Mount Abang. Great hike for a great experience.",
+                    "locationOfActivity": "Mount Batur, Bali",
+                    "costOfActivity": "25 USD",
+                    "distanceFromAddress": "2 hours from Seminyak",
+                    "disabilityFriendly": "No",
+                    "isFood": "No",
+                    "locationOfNearestFood": "Kintamani"
+                },
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Beaches in Bali",
+                    "descriptionOfActivity": "Explore the sandy beaches of Bali and take in the sights of the blue waters.",
+                    "locationOfActivity": "Balangan Beach, Bali",
+                    "costOfActivity": "Free",
+                    "distanceFromAddress": "1 hour from Seminyak",
+                    "disabilityFriendly": "No",
+                    "isFood": "Yes",
+                    "locationOfNearestFood": "Jimbaran"
+                },
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Clubbing in Kuta",
+                    "descriptionOfActivity": "Experience the Bali nightlife in Kuta. Visit some of the best clubs in the area and groove to the music.",
+                    "locationOfActivity": "Kuta, Bali",
+                    "costOfActivity": "25 USD",
+                    "distanceFromAddress": "30 minutes from Seminyak",
+                    "disabilityFriendly": "Yes",
+                    "isFood": "Yes",
+                    "locationOfNearestFood": "Kuta"
+                }
+            ]
+        },
+        {
+            "day": "2",
+            "activities": [
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Hiking in Ubud",
+                    "descriptionOfActivity": "Explore the terraced rice paddies and lush green fields of Ubud with an experienced guide.",
+                    "locationOfActivity": "Ubud, Bali",
+                    "costOfActivity": "25 USD",
+                    "distanceFromAddress": "3 hours from Seminyak",
+                    "disabilityFriendly": "No",
+                    "isFood": "No",
+                    "locationOfNearestFood": "Ubud"
+                },
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Beaches in Nusa Dua",
+                    "descriptionOfActivity": "Take a walk and relax along the pristine beaches of Nusa Dua, with it's beautiful white sand and clear waters.",
+                    "locationOfActivity": "Nusa Dua, Bali",
+                    "costOfActivity": "Free",
+                    "distanceFromAddress": "3 hours from Seminyak",
+                    "disabilityFriendly": "No",
+                    "isFood": "Yes",
+                    "locationOfNearestFood": "Kuta"
+                },
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Clubbing in Seminyak",
+                    "descriptionOfActivity": "Experience the night scene in Seminyak with some of the best clubs and dance the night away.",
+                    "locationOfActivity": "Seminyak, Bali",
+                    "costOfActivity": "25 USD",
+                    "distanceFromAddress": "10 minutes from Seminyak",
+                    "disabilityFriendly": "Yes",
+                    "isFood": "Yes",
+                    "locationOfNearestFood": "Seminyak"
+                }
+            ]
+        },
+        {
+            "day": "3",
+            "activities": [
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Hiking in Mount Agung",
+                    "descriptionOfActivity": "See the surrounding villages, explore the river valleys and admire the beautiful views that Mount Agung has to offer.",
+                    "locationOfActivity": "Mount Agung, Bali",
+                    "costOfActivity": "25 USD",
+                    "distanceFromAddress": "3 hours from Seminyak",
+                    "disabilityFriendly": "No",
+                    "isFood": "No",
+                    "locationOfNearestFood": "Candi Dasa"
+                },
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Beaches in Uluwatu",
+                    "descriptionOfActivity": "Stroll along Uluwatu's beautiful cliffs or explore the vibrant beach, perfect for relaxing or some watersports.",
+                    "locationOfActivity": "Uluwatu, Bali",
+                    "costOfActivity": "Free",
+                    "distanceFromAddress": "2 hours from Seminyak",
+                    "disabilityFriendly": "No",
+                    "isFood": "Yes",
+                    "locationOfNearestFood": "Kuta"
+                },
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Clubbing in Canggu",
+                    "descriptionOfActivity": "Experience the nightlife in Canggu, dance the night away to the beats of the music and enjoy an unforgettable night.",
+                    "locationOfActivity": "Canggu, Bali",
+                    "costOfActivity": "25 USD",
+                    "distanceFromAddress": "20 minutes from Seminyak",
+                    "disabilityFriendly": "Yes",
+                    "isFood": "Yes",
+                    "locationOfNearestFood": "Canggu"
+                }
+            ]
+        },
+        {
+            "day": "4",
+            "activities": [
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Hiking in Mount Rinjani",
+                    "descriptionOfActivity": "Experience the beautiful landscape that Mount Rinjani has to offer and visit some ancient temples at the top of the mountain.",
+                    "locationOfActivity": "Mount Rinjani, Bali",
+                    "costOfActivity": "25 USD",
+                    "distanceFromAddress": "4 hours from Seminyak",
+                    "disabilityFriendly": "No",
+                    "isFood": "No",
+                    "locationOfNearestFood": "Senaru"
+                },
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Beaches in Uluwatu",
+                    "descriptionOfActivity": "Stroll along Uluwatu's beautiful cliffs or explore the vibrant beach, perfect for relaxing or some watersports.",
+                    "locationOfActivity": "Uluwatu, Bali",
+                    "costOfActivity": "Free",
+                    "distanceFromAddress": "2 hours from Seminyak",
+                    "disabilityFriendly": "No",
+                    "isFood": "Yes",
+                    "locationOfNearestFood": "Kuta"
+                },
+                {
+                    "time": "09:00am",
+                    "nameOfActivity": "Dance Performance in Bali",
+                    "descriptionOfActivity": "Experience one of the most iconic dance performances from Bali in a traditional Balinese setting.",
+                    "locationOfActivity": "Ubud, Bali",
+                    "costOfActivity": "25 USD",
+                    "distanceFromAddress": "3 hours from Seminyak",
+                    "disabilityFriendly": "Yes",
+                    "isFood": "Yes",
+                    "locationOfNearestFood": "Ubud"
+                }
+            ]
+        }
+    ],
+      "totalCost": "150 USD",
+      "error": ""
+  }
+
+  if (isLoading) {
+    return (
+      <View>
+        <Text>Your itinerary is being crafted ...</Text>
+      </View>
+    )
+  }
+
+  if (showItinerary && result) {
+
     return (
       <View style={styles.container}>
-        <Text>itinerary page</Text>
-        {console.log(result)}
+        <FlatList 
+          data={result.itinerary}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={(item) => (
+            <ItineraryCard itineraryData={item}/>
+          )}
+        />
         <Button title="Travel Detail Form" onPress={() => setShowItinerary(false)} />
       </View>
     )
