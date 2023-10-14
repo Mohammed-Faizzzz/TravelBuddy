@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ImageBackground, View, Text, StyleSheet, TouchableOpacity, TextInput, Platform } from 'react-native';
 
-const API_URL = 'http://192.168.1.253:3000';
+const API_URL = 'http://137.132.26.172:19000';
 
 const LoginScreen = ({ navigation }) => {
 
@@ -49,8 +49,9 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const goToSignUpPage = () => {
-    navigation.navigate('SignupScreen');
+    // navigation.navigate('SignupScreen');
     // navigation.navigate('Home');
+    navigation.navigate('TravelInput');
   };
 
   return (
